@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura - Mental Health Diary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            animation: {
+              'spin-slow': 'spin 3s linear infinite',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      /* Light Mode Slider */
+      .rc-slider-track {
+        background-color: #0ea5e9; /* sky-500 */
+      }
+      .rc-slider-handle {
+        border-color: #0ea5e9;
+        opacity: 1;
+      }
+      .rc-slider-handle:hover, .rc-slider-handle-dragging  {
+        border-color: #0284c7 !important; /* sky-600 */
+        box-shadow: 0 0 0 5px rgba(14, 165, 233, 0.2) !important;
+      }
+      
+      /* Dark Mode Slider */
+      .dark .rc-slider-track {
+        background-color: #38bdf8; /* sky-400 */
+      }
+       .dark .rc-slider-rail {
+        background-color: #334155; /* slate-700 */
+      }
+      .dark .rc-slider-handle {
+        background-color: #0f172a; /* slate-900 */
+        border-color: #38bdf8;
+      }
+      .dark .rc-slider-handle:hover, .dark .rc-slider-handle-dragging  {
+        border-color: #7dd3fc !important; /* sky-300 */
+        box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.2) !important;
+      }
+      .dark .rc-slider-mark-text {
+        color: #94a3b8; /* slate-400 */
+      }
+
+      @media print {
+        body.printing-entry {
+          background-color: white !important;
+        }
+        body.printing-entry > #root > div {
+          visibility: hidden;
+        }
+        .printable {
+          visibility: visible !important;
+          position: absolute;
+          left: 20px;
+          top: 20px;
+          right: 20px;
+          box-shadow: none !important;
+          border: 1px solid #ccc !important;
+        }
+        .printable * {
+          visibility: visible !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+      }
+    </style>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://esm.sh/rc-slider@10.6.2/assets/index.css" />
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.1/",
+    "react": "https://esm.sh/react@^19.1.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.13.0",
+    "recharts": "https://esm.sh/recharts@^3.1.2",
+    "framer-motion": "https://esm.sh/framer-motion@^11.3.1",
+    "d3-scale": "https://esm.sh/d3-scale@^4.0.2",
+    "rc-slider": "https://esm.sh/rc-slider@^10.6.2",
+    "jspdf": "https://esm.sh/jspdf@^2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

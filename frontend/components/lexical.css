@@ -1,0 +1,9 @@
+/* Lexical editor basic styles */
+.ContentEditable {
+  min-height: 10rem;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+}
+
+/* Add more custom styles as needed */
