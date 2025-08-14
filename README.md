@@ -91,11 +91,6 @@ frontend/
 ## Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
 
-## License
-MIT
-
 ## Author
-Nikhil Kartha
+Nikhil N Kartha
 
----
-For questions or support, open an issue on GitHub or contact the author.
