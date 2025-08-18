@@ -142,7 +142,7 @@ const WeeklyRecapCard: React.FC<{ recap: WeeklyRecapData }> = ({ recap }) => {
                 <h4 className="font-semibold text-slate-600 dark:text-slate-300 text-sm mb-2">Top Emotions</h4>
                 <div className="flex flex-wrap gap-2">
                     {topEmotions.map(({ emotion }) => (
-                        <span key={emotion} className="bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300 text-xs font-medium px-2.5 py-1 rounded-full">{emotion}</span>
+                        <span key={emotion} className="bg-brand-100 text-brand-700 dark:bg-brand-900/50 dark:text-brand-300 text-xs font-medium px-2.5 py-1 rounded-full">{emotion}</span>
                     ))}
                 </div>
             </div>
@@ -171,7 +171,7 @@ const trendIconMap: { [key in TrendInsight['icon']]: React.FC<{className?: strin
 const trendColorMap = {
     red: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
     green: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
-    blue: 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300',
+    blue: 'bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300',
     yellow: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
 }
 
@@ -207,8 +207,8 @@ const AffirmationsSection: React.FC<{affirmations: Affirmation[]}> = ({ affirmat
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {affirmations.map(affirmation => (
-                <div key={affirmation.id} className="bg-gradient-to-br from-sky-50 to-teal-50 dark:from-sky-900/50 dark:to-teal-900/50 border-l-4 border-sky-400 dark:border-sky-500 p-4 rounded-lg shadow-sm">
-                    <QuoteIcon className="h-5 w-5 text-sky-300 dark:text-sky-600 mb-2"/>
+                <div key={affirmation.id} className="bg-gradient-to-br from-brand-50 to-pink-50 dark:from-brand-900/40 dark:to-pink-900/40 border-l-4 border-brand-400 dark:border-brand-500 p-4 rounded-lg shadow-sm">
+                    <QuoteIcon className="h-5 w-5 text-brand-300 dark:text-brand-500 mb-2"/>
                     <p className="italic text-slate-700 dark:text-slate-300">"{affirmation.text}"</p>
                 </div>
             ))}
@@ -236,15 +236,15 @@ const MoodTrendChart: React.FC<{points: MoodTrendPoint[]}> = ({ points }) => {
             <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-32">
                 <defs>
                     <linearGradient id="moodLine" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#0ea5e9"/>
-                        <stop offset="100%" stopColor="#0369a1"/>
+                        <stop offset="0%" stopColor="#7c3aed"/>
+                        <stop offset="100%" stopColor="#ec4899"/>
                     </linearGradient>
                 </defs>
                 <path d={path} fill="none" stroke="url(#moodLine)" strokeWidth={2.5} strokeLinecap="round"/>
                 {points.map((p,i) => {
                     const x = padding + i * xStep;
                     const y = padding + (1 - (p.avgScore - min)/(max - min || 1)) * (height - padding*2);
-                    return <circle key={p.date} cx={x} cy={y} r={3} className="fill-sky-500"/>;
+                    return <circle key={p.date} cx={x} cy={y} r={3} className="fill-brand-500"/>;
                 })}
             </svg>
             <div className="mt-2 flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
@@ -265,7 +265,7 @@ const WeekdayMoodBars: React.FC<{data: WeekdayMood[]}> = ({ data }) => {
                 <div key={d.weekday} className="flex items-center space-x-2">
                     <span className="w-16 shrink-0 text-xs font-medium text-slate-500 dark:text-slate-400">{d.weekday.slice(0,3)}</span>
                     <div className="flex-1 h-3 bg-slate-100 dark:bg-slate-700 rounded overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-sky-400 to-teal-500" style={{ width: `${(d.avgScore/max)*100}%` }} />
+                        <div className="h-full bg-gradient-to-r from-brand-500 to-pink-500" style={{ width: `${(d.avgScore/max)*100}%` }} />
                     </div>
                     <span className="w-8 text-xs text-right text-slate-600 dark:text-slate-300">{d.avgScore.toFixed(1)}</span>
                 </div>
@@ -279,7 +279,7 @@ const EmotionChips: React.FC<{emotions: EmotionFrequency[]}> = ({ emotions }) =>
     return (
         <div className="flex flex-wrap gap-2">
             {emotions.map(e => (
-                <span key={e.emotion} className="px-3 py-1 rounded-full text-xs font-medium bg-sky-50 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40">{e.emotion} <span className="opacity-60">×{e.count}</span></span>
+                <span key={e.emotion} className="px-3 py-1 rounded-full text-xs font-medium bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 border border-brand-200/50 dark:border-brand-800/40">{e.emotion} <span className="opacity-60">×{e.count}</span></span>
             ))}
         </div>
     );
@@ -290,7 +290,7 @@ const PositiveWordsList: React.FC<{words: PositiveWordStat[]}> = ({ words }) => 
     return (
         <div className="flex flex-wrap gap-3">
             {words.map(w => (
-                <div key={w.word} className="px-3 py-2 rounded-lg bg-gradient-to-br from-teal-50 to-sky-50 dark:from-teal-900/40 dark:to-sky-900/40 border border-teal-200/60 dark:border-teal-800/40 shadow-sm">
+                <div key={w.word} className="px-3 py-2 rounded-lg bg-gradient-to-br from-teal-50 to-brand-50 dark:from-teal-900/40 dark:to-brand-900/40 border border-teal-200/60 dark:border-teal-800/40 shadow-sm">
                     <span className="text-xs font-semibold text-teal-700 dark:text-teal-300">{w.word}</span>
                     <span className="ml-1 text-[10px] text-slate-500 dark:text-slate-400">{w.count}</span>
                 </div>

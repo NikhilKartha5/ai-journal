@@ -41,7 +41,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({ token, onSynced })
   if (!show) return null;
 
   return (
-    <div className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-4 py-2 text-xs sm:text-sm flex items-center justify-between shadow ${online ? 'bg-sky-50 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200'}`}>
+  <div className={`fixed top-0 left-0 right-0 z-50 px-3 sm:px-4 py-2 text-xs sm:text-sm flex items-center justify-between shadow ${online ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200'}`}>
       <div className="flex items-center gap-2">
         {!online && <span className="font-semibold">Offline</span>}
         {online && syncing && <span className="font-semibold">Syncing…</span>}
@@ -51,7 +51,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({ token, onSynced })
       </div>
       <div className="flex items-center gap-2">
         {online && queueCount > 0 && !syncing && (
-          <button onClick={attemptSync} className="px-2 py-1 rounded bg-sky-600 text-white hover:bg-sky-700 text-xs">Sync Now</button>
+          <button onClick={attemptSync} className="px-2 py-1 rounded bg-brand-600 text-white hover:bg-brand-700 text-xs">Sync Now</button>
         )}
       </div>
     </div>

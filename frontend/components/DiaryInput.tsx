@@ -54,10 +54,10 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="relative">
+  <div className="relative">
         <LexicalComposer initialConfig={initialConfig}>
           <RichTextPlugin
-            contentEditable={<ContentEditable className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-shadow duration-200 dark:placeholder-slate-400 p-4 pr-12 h-40" />}
+  contentEditable={<ContentEditable className="ContentEditable custom-diary-editor bg-white dark:bg-slate-800/70 border border-slate-300 dark:border-slate-600 rounded-2xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-shadow duration-200 dark:placeholder-slate-400 p-6 pr-14 text-base leading-relaxed max-h-[420px] min-h-[220px] overflow-y-auto shadow-sm hover:shadow-md scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600" />}
             placeholder={<div className="text-slate-400 px-4 pt-4">{t('diaryInput.placeholder')}</div>}
             ErrorBoundary={({ children, error }) => error ? <div className="text-red-600">Error: {error.message}</div> : children}
           />
@@ -69,10 +69,10 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
             });
           }} />
         </LexicalComposer>
-        <button
+  <button
           type="button"
           onClick={handleMicClick}
-          className="absolute top-3 right-3 p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+          className="absolute top-3 right-3 p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
           aria-label={isListening ? t('diaryInput.stopRecording') : t('diaryInput.startRecording')}
           disabled={isLoading || !isSupported}
         >
@@ -89,7 +89,7 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
       )}
       <button
         type="submit"
-        className="w-full flex items-center justify-center bg-sky-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:cursor-not-allowed transition-all duration-200"
+  className="w-full flex items-center justify-center bg-gradient-to-r from-brand-600 via-brand-500 to-pink-500 text-white font-semibold py-3 px-6 rounded-xl shadow-sm hover:from-brand-700 hover:via-brand-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:cursor-not-allowed transition-all duration-200"
         disabled={isLoading || !text.trim()}
       >
         {isLoading ? (
@@ -100,7 +100,7 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
         ) : (
           <>
             <SendIcon />
-            {t('diaryInput.analyzeButton')}
+            {t('diaryInput.saveButton', 'Save')}
           </>
         )}
       </button>

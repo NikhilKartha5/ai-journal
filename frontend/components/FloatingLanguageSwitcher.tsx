@@ -16,7 +16,7 @@ const FloatingLanguageSwitcher: React.FC = () => {
         id="floating-lang"
         value={current}
         onChange={change}
-        className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 rounded-md px-2 py-1 text-xs shadow focus:outline-none focus:ring-2 focus:ring-sky-500"
+  className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 rounded-md px-2 py-1 text-xs shadow focus:outline-none focus:ring-2 focus:ring-brand-500"
       >
         <option value="en">English</option>
         <option value="hi">हिन्दी</option>

@@ -21,7 +21,7 @@ function buildNavItems(t: any): NavItemData[] {
   return [
     { id: 'dashboard', label: t('nav.dashboard'), icon: HomeIcon },
     { id: 'insights', label: t('nav.insights'), icon: ChartBarIcon },
-    { id: 'recommendations', label: t('nav.recommendations'), icon: LightbulbIcon },
+  { id: 'recommendations', label: t('nav.suggestions'), icon: LightbulbIcon },
     { id: 'journal', label: t('nav.journal'), icon: BookOpenIcon },
     { id: 'community', label: t('nav.community'), icon: HeartIcon },
     { id: 'settings', label: t('nav.settings'), icon: CogIcon },
@@ -100,7 +100,7 @@ const NavItem: React.FC<NavItemProps> = ({ item, isActive, onClick, isMobile = f
       <button
         onClick={onClick}
         className={`flex flex-col items-center justify-center w-16 h-16 rounded-lg transition-colors duration-200 group relative ${
-          isActive ? 'text-sky-600 dark:text-sky-400' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-400'
+          isActive ? 'text-brand-600 dark:text-brand-400' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400'
         }`}
         aria-label={item.label}
         aria-current={isActive ? 'page' : undefined}
@@ -109,14 +109,14 @@ const NavItem: React.FC<NavItemProps> = ({ item, isActive, onClick, isMobile = f
           <Icon className="h-6 w-6" />
           <AnimatePresence>
           {isActive && !isMobile && (
-             <motion.div
-                className="mt-1 h-1 w-4 rounded-full bg-sky-600 dark:bg-sky-400"
-                layoutId="active-indicator"
-             />
+         <motion.div
+           className="mt-1 h-1 w-4 rounded-full bg-brand-600 dark:bg-brand-400"
+           layoutId="active-indicator"
+         />
           )}
           </AnimatePresence>
           {isActive && isMobile && (
-            <div className="mt-1 h-1 w-2 rounded-full bg-sky-600 dark:bg-sky-400" />
+            <div className="mt-1 h-1 w-2 rounded-full bg-brand-600 dark:bg-brand-400" />
           )}
         </div>
         <span
@@ -141,7 +141,7 @@ const LanguageSwitcher: React.FC<{ compact?: boolean }> = ({ compact }) => {
     <select
       value={current}
       onChange={change}
-      className={`text-xs bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded px-1 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500 ${compact ? 'w-16' : 'w-20'}`}
+  className={`text-xs bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded px-1 py-1 focus:outline-none focus:ring-1 focus:ring-brand-500 ${compact ? 'w-16' : 'w-20'}`}
       aria-label="Language"
     >
       <option value="en">EN</option>

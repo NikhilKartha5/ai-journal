@@ -115,12 +115,12 @@ const TherapistModeModal: React.FC<TherapistModeModalProps> = ({ isOpen, onClose
                     <div>
                       <label htmlFor="startDate" className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Start Date</label>
                       <input type="date" id="startDate" value={options.startDate} onChange={e => handleOptionChange('startDate', e.target.value)}
-                        className="w-full mt-1 px-2 py-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500 bg-white dark:bg-slate-700"/>
+                        className="w-full mt-1 px-2 py-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-sm focus:ring-brand-500 focus:border-brand-500 bg-white dark:bg-slate-700"/>
                     </div>
                     <div>
                       <label htmlFor="endDate" className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">End Date</label>
                       <input type="date" id="endDate" max={today} value={options.endDate} onChange={e => handleOptionChange('endDate', e.target.value)}
-                        className="w-full mt-1 px-2 py-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500 bg-white dark:bg-slate-700"/>
+                        className="w-full mt-1 px-2 py-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-sm focus:ring-brand-500 focus:border-brand-500 bg-white dark:bg-slate-700"/>
                     </div>
                   </div>
                 </fieldset>
@@ -147,7 +147,7 @@ const TherapistModeModal: React.FC<TherapistModeModalProps> = ({ isOpen, onClose
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                          {shareOptions.map(({ id, label, icon: Icon }) => (
                             <button key={id} onClick={() => handleOptionChange('shareMethod', id)}
-                                className={`flex items-center justify-center text-sm p-2.5 rounded-md border-2 transition-colors ${options.shareMethod === id ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/40' : 'border-slate-300 dark:border-slate-600 hover:border-sky-400 dark:hover:border-sky-500'}`}
+                                className={`flex items-center justify-center text-sm p-2.5 rounded-md border-2 transition-colors ${options.shareMethod === id ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/40' : 'border-slate-300 dark:border-slate-600 hover:border-brand-400 dark:hover:border-brand-500'}`}
                             >
                                 <Icon className="h-5 w-5 mr-2"/>
                                 {label}
@@ -159,7 +159,7 @@ const TherapistModeModal: React.FC<TherapistModeModalProps> = ({ isOpen, onClose
                             <motion.div initial={{opacity: 0, height: 0}} animate={{opacity: 1, height: 'auto'}} exit={{opacity: 0, height: 0}} className="mt-4 overflow-hidden">
                                 <label htmlFor="therapistEmail" className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Therapist's Email</label>
                                 <input type="email" id="therapistEmail" placeholder="therapist@example.com" value={options.therapistEmail} onChange={e => handleOptionChange('therapistEmail', e.target.value)}
-                                    className="w-full mt-1 px-2 py-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500 bg-white dark:bg-slate-700"/>
+                                    className="w-full mt-1 px-2 py-1.5 border border-slate-300 dark:border-slate-600 rounded-md text-sm focus:ring-brand-500 focus:border-brand-500 bg-white dark:bg-slate-700"/>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -191,7 +191,7 @@ const TherapistModeModal: React.FC<TherapistModeModalProps> = ({ isOpen, onClose
 const Checkbox: React.FC<{id: string, checked: boolean, onChange: (checked: boolean) => void, label: string}> = ({ id, checked, onChange, label }) => (
     <div className="flex items-center">
         <input type="checkbox" id={id} checked={checked} onChange={(e) => onChange(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 dark:border-slate-500 text-sky-600 focus:ring-sky-500 bg-slate-100 dark:bg-slate-700"
+            className="h-4 w-4 rounded border-slate-300 dark:border-slate-500 text-brand-600 focus:ring-brand-500 bg-slate-100 dark:bg-slate-700"
         />
         <label htmlFor={id} className="ml-2 text-sm text-slate-700 dark:text-slate-200">{label}</label>
     </div>

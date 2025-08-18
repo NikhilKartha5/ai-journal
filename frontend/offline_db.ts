@@ -1,5 +1,5 @@
 // Simple IndexedDB wrapper for offline diary entries & queue
-export interface OfflineDiaryEntry { id: number | string; text: string; timestamp: string; analysis: any; pending?: boolean; temp?: boolean; updatedAt?: string; localUpdatedAt?: string; }
+export interface OfflineDiaryEntry { id: number | string; text: string; title?: string; tags?: string[]; timestamp: string; analysis: any; pending?: boolean; temp?: boolean; updatedAt?: string; localUpdatedAt?: string; }
 export interface QueueItem { key: string; method: string; url: string; body: any; createdAt: number; tempId?: number | string; type?: 'create' | 'delete' | 'update'; baseVersion?: string; }
 
 const DB_NAME = 'auraOffline';

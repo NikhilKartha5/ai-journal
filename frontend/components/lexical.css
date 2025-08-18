@@ -6,4 +6,25 @@
   background: transparent;
 }
 
+.custom-diary-editor {
+  font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  line-height: 1.6;
+  word-break: break-word;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: thin;
+}
+
+.custom-diary-editor:focus-visible {
+  outline: none;
+}
+
+.custom-diary-editor p { margin: 0 0 0.9rem; }
+.custom-diary-editor p:last-child { margin-bottom: 0; }
+
+/* Custom scrollbar for WebKit */
+.custom-diary-editor::-webkit-scrollbar { width: 8px; }
+.custom-diary-editor::-webkit-scrollbar-track { background: transparent; }
+.custom-diary-editor::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.5); border-radius: 4px; }
+.custom-diary-editor::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,0.7); }
+
 /* Add more custom styles as needed */

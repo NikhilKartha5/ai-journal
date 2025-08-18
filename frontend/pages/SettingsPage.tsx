@@ -107,7 +107,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onSettingsChange,
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {/* Appearance Card */}
                     <motion.div variants={itemVariants} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                                                <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><PaletteIcon className="mr-2 text-sky-500"/> {t('settings.appearance')}</h2>
+                                                <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><PaletteIcon className="mr-2 text-brand-500 dark:text-brand-400"/> {t('settings.appearance')}</h2>
                         <div className="flex items-center justify-between">
                                                         <label className="text-slate-600 dark:text-slate-300">Theme</label>
                             <div className="flex items-center space-x-1 p-1 rounded-lg bg-slate-100 dark:bg-slate-700">
@@ -120,7 +120,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onSettingsChange,
 
                      {/* Reminders Card */}
                     <motion.div variants={itemVariants} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><BellIcon className="mr-2 text-sky-500"/> {t('settings.reminders')}</h2>
+                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><BellIcon className="mr-2 text-brand-500 dark:text-brand-400"/> {t('settings.reminders')}</h2>
                          <div className="space-y-4">
                              <div className="flex items-center justify-between">
                                 <label htmlFor="reminder-toggle" className="text-slate-600 dark:text-slate-300">Enable daily reminders</label>
@@ -161,7 +161,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onSettingsChange,
 
                     {/* Data Management Card */}
                     <motion.div variants={itemVariants} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><DatabaseIcon className="mr-2 text-sky-500"/> {t('settings.dataManagement')}</h2>
+                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><DatabaseIcon className="mr-2 text-brand-500 dark:text-brand-400"/> {t('settings.dataManagement')}</h2>
                          <div className="space-y-4">
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                                 <div>
@@ -204,7 +204,7 @@ const ThemeButton: React.FC<{icon: React.FC<{className?: string}>, label: string
     return (
         <button
             onClick={() => onClick(targetTheme)}
-            className={`relative px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${isActive ? 'text-sky-700' : 'text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100'}`}
+            className={`relative px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${isActive ? 'text-brand-700 dark:text-brand-400' : 'text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100'}`}
         >
             <span className="relative z-10 flex items-center"><Icon className="mr-1.5"/> {label}</span>
             {isActive && <motion.div layoutId="theme-pill" className="absolute inset-0 bg-white dark:bg-slate-800/80 shadow rounded-md" />}
@@ -219,7 +219,7 @@ const ToggleSwitch: React.FC<{id: string, checked: boolean, onChange: (checked: 
             role="switch"
             aria-checked={checked}
             onClick={() => onChange(!checked)}
-            className={`relative inline-flex items-center h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 ${checked ? 'bg-sky-600' : 'bg-slate-200 dark:bg-slate-600'}`}
+            className={`relative inline-flex items-center h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 ${checked ? 'bg-brand-600' : 'bg-slate-200 dark:bg-slate-600'}`}
         >
             <motion.span
                 aria-hidden="true"

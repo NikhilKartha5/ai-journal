@@ -71,8 +71,11 @@ export const useSpeechRecognition = () => {
       setIsSupported(false);
       return;
     }
-    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-      setError('Microphone access requires HTTPS.');
+    // Treat common loopback hosts as secure contexts (spec treats localhost as secure; we also include 127.0.0.1 & ::1)
+    const loopbackHosts = ['localhost', '127.0.0.1', '::1'];
+    const isLoopback = loopbackHosts.includes(window.location.hostname);
+    if (window.location.protocol !== 'https:' && !isLoopback) {
+      setError('Microphone access requires a secure context (HTTPS). Serve the app over HTTPS or use localhost / 127.0.0.1 for development.');
       setIsSupported(false);
       return;
     }

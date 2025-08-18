@@ -1,6 +1,6 @@
 {
   "appTitle": "AI Diary",
-  "nav": {"dashboard": "Dashboard","insights": "Insights","journal": "Journal","recommendations": "Recommendations","community": "Community","settings": "Settings","logout": "Logout"},
+  "nav": {"dashboard": "Dashboard","insights": "Insights","journal": "Journal","recommendations": "Recommendations","suggestions": "Suggestions","community": "Community","settings": "Settings","logout": "Logout"},
   "actions": {"save": "Save","cancel": "Cancel","delete": "Delete","edit": "Edit","post": "Post"},
   "journal": {
     "empty": "Your Journal is Empty",

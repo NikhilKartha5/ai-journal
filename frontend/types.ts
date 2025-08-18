@@ -9,6 +9,8 @@ export interface AnalysisResult {
 export interface DiaryEntry {
   id: number | string; // temp numeric id (Date.now()) or persistent Mongo _id string
   text: string;
+  title?: string;
+  tags?: string[];
   timestamp: string;
   analysis: AnalysisResult;
   pending?: boolean; // unsynced create
@@ -76,6 +78,12 @@ export interface Recommendation {
   source: string;
   link?: string;
   icon: React.FC<{ className?: string }>;
+  category?: 'recent' | 'pattern' | 'popular' | 'library' | 'single';
+}
+
+export interface EmotionSuggestion {
+  emotion: string; // e.g. 'anxiety'
+  items: Recommendation[]; // 1-2 short actionable resources
 }
 
 export interface AppSettings {

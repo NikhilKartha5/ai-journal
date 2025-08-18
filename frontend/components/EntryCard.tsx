@@ -7,7 +7,7 @@ interface EntryCardProps { entry: DiaryEntry & { pending?: boolean }; onDelete: 
 
 export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete, onUpdate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { id, text, timestamp, analysis } = entry;
+  const { id, text, timestamp, analysis, title, tags } = entry;
   const date = new Date(timestamp);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
@@ -73,11 +73,12 @@ export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete, onUpdate 
   const getEmotionColor = (emotion: string) => emotionColorMap[emotion.toLowerCase()] || 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300';
 
   return (
-  <div id={`entry-${id}`} className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border-l-4 ${sentimentColor} transition-shadow hover:shadow-md dark:hover:shadow-sky-900/50`}>
+  <div id={`entry-${id}`} className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border-l-4 ${sentimentColor} transition-shadow hover:shadow-md dark:hover:shadow-brand-900/40`}>
     <div className="p-5">
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1">
-          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          {title && <h3 className="text-base font-semibold leading-snug text-slate-800 dark:text-slate-100 mb-0.5 line-clamp-1">{title}</h3>}
+          <p className="text-xs font-medium text-slate-600 dark:text-slate-300 flex items-center gap-2">
             {date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             {entry.pending && <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-200 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-300 dark:border-amber-700">Unsynced</span>}
           </p>
@@ -90,25 +91,28 @@ export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete, onUpdate 
               {emotion}
               </span>
             ))}
+            {tags && tags.slice(0,4).map(tag => (
+              <span key={tag} className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300">#{tag}</span>
+            ))}
           </div>
         </div>
         <div className="flex items-center space-x-0.5 sm:space-x-1 no-print">
-          <button onClick={shareViaEmail} className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-400 rounded-full transition-colors" aria-label="Share entry">
+          <button onClick={shareViaEmail} className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 rounded-full transition-colors" aria-label="Share entry">
             <ShareIcon />
           </button>
-          <button onClick={handlePrint} className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-400 rounded-full transition-colors" aria-label="Print entry">
+          <button onClick={handlePrint} className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 rounded-full transition-colors" aria-label="Print entry">
             <PrinterIcon />
           </button>
           <button onClick={handleDelete} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors" aria-label="Delete entry">
             <TrashIcon />
           </button>
-          <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-400 rounded-full transition-colors" aria-label="Expand entry">
+          <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-brand-600 dark:hover:text-brand-400 rounded-full transition-colors" aria-label="Expand entry">
             <ChevronDownIcon className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
           </button>
         </div>
       </div>
       {shareMsg && (
-        <div className="mt-2 text-xs text-sky-600 dark:text-sky-400">{shareMsg}</div>
+  <div className="mt-2 text-xs text-brand-600 dark:text-brand-400">{shareMsg}</div>
       )}
       <AnimatePresence>
       {isExpanded && (
@@ -132,10 +136,10 @@ export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete, onUpdate 
             )}
             {isEditing && (
               <div className="space-y-2">
-                <textarea value={editText} onChange={e => setEditText(e.target.value)} className="w-full h-32 text-sm p-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+                <textarea value={editText} onChange={e => setEditText(e.target.value)} className="w-full h-32 text-sm p-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500" />
                 <div className="flex gap-2">
                   <button onClick={() => { setIsEditing(false); setEditText(text); }} className="px-3 py-1 text-xs rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Cancel</button>
-                  <button onClick={() => { if (editText.trim() && editText !== text) { onUpdate && onUpdate(id, editText.trim()); } setIsEditing(false); }} className="px-3 py-1 text-xs rounded bg-sky-600 text-white hover:bg-sky-500 disabled:opacity-40" disabled={!editText.trim() || editText === text}>Save</button>
+                  <button onClick={() => { if (editText.trim() && editText !== text) { onUpdate && onUpdate(id, editText.trim()); } setIsEditing(false); }} className="px-3 py-1 text-xs rounded bg-brand-600 text-white hover:bg-brand-500 disabled:opacity-40" disabled={!editText.trim() || editText === text}>Save</button>
                 </div>
               </div>
             )}

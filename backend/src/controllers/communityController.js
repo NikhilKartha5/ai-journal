@@ -73,3 +73,17 @@ export const likePost = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// Danger: Delete all community posts. Protected by a purge key header.
+export const deleteAllPosts = async (req, res) => {
+  try {
+    const purgeKey = process.env.COMMUNITY_PURGE_KEY;
+    if (!purgeKey) return res.status(500).json({ message: 'Purge key not configured' });
+    const provided = req.headers['x-purge-key'];
+    if (provided !== purgeKey) return res.status(403).json({ message: 'Forbidden' });
+    const result = await CommunityPost.deleteMany({});
+    res.json({ message: 'All community posts deleted', deleted: result.deletedCount });
+  } catch (e) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};

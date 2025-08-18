@@ -2,6 +2,7 @@ import React from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import MainApp from './components/MainApp';
 import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
 import { AnimatePresence } from 'framer-motion';
 
 const AppContent: React.FC = () => {
@@ -9,7 +10,7 @@ const AppContent: React.FC = () => {
 
     if (isLoading) {
         // You can return a global loading spinner here if desired
-        return <div className="min-h-screen bg-slate-100 dark:bg-slate-900" />;
+    return <div className="min-h-screen bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#0f172a] to-[#334155]" />;
     }
 
     return (
@@ -17,7 +18,7 @@ const AppContent: React.FC = () => {
             {currentUser ? (
                 <MainApp key="main-app" />
             ) : (
-                <AuthPage key="auth-page" />
+                <HomePage key="home-page" />
             )}
         </AnimatePresence>
     );

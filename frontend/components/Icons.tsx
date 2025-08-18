@@ -42,7 +42,7 @@ export const HeartIcon: React.FC<{className?: string}> = ({ className }) => (
 );
 
 export const BrainCircuitIcon: React.FC<{className?: string}> = ({ className }) => (
-    <svg className={`h-5 w-5 mr-2 text-sky-500 ${className}`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={`h-5 w-5 mr-2 text-brand-500 dark:text-brand-400 ${className}`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 5a3 3 0 1 0-5.993.251 4 4 0 0 0-2.006 3.496C4 12.252 4.252 14 5.5 14h.05a3 3 0 0 0 2.95 2.5v.25a2.25 2.25 0 0 0 4.5 0v-.25a3 3 0 0 0 2.95-2.5h.05c1.248 0 1.5-1.748 1.5-3.253a4 4 0 0 0-2.006-3.496A3 3 0 1 0 12 5Z"/><path d="M12 16.75V19a2 2 0 0 0 4 0v-2.25"/><path d="M12 16.75V19a2 2 0 0 1-4 0v-2.25"/>
     </svg>
 );
@@ -78,14 +78,22 @@ export const ChevronDownIcon: React.FC<{className?: string}> = ({ className }) =
 );
 
 export const LogoIcon: React.FC<{className?: string}> = ({ className }) => (
-    <svg className={`h-8 w-8 text-sky-500 dark:text-sky-400 ${className}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
-        <radialGradient id="auraGradient" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.2" />
-        </radialGradient>
-        <circle cx="12" cy="12" r="7" fill="url(#auraGradient)" />
-        <path d="M12 8v4l3 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg className={`h-8 w-8 ${className}`} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="AI Diary Logo">
+        <defs>
+            <linearGradient id="logoGradient" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#a855f7" />
+                <stop offset="0.5" stopColor="#ec4899" />
+                <stop offset="1" stopColor="#f59e0b" />
+            </linearGradient>
+            <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(28 24) rotate(45) scale(32)">
+                <stop stopColor="#f5d0fe" stopOpacity="0.9" />
+                <stop offset="1" stopColor="#a855f7" stopOpacity="0" />
+            </radialGradient>
+        </defs>
+        <circle cx="32" cy="32" r="30" stroke="url(#logoGradient)" strokeWidth="2.5" fill="url(#glow)" />
+        <path d="M24 38c4 6 12 6 16 0 3-4 2-10-2-13-3-2-5-2-6-1-1-1-3-1-6 1-4 3-5 9-2 13Z" stroke="url(#logoGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M20 44l10-3 10-21c.4-.9-.5-1.8-1.4-1.4L18 29l-3 11c-.3 1 .7 2 1.7 1.7L20 44Z" fill="url(#logoGradient)" opacity="0.9" />
+        <path d="M28 30l6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
     </svg>
 );
 

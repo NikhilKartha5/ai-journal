@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { DiaryEntry, Recommendation } from '../types';
+import { DiaryEntry, Recommendation, EmotionSuggestion } from '../types';
 import { getRecommendations } from '../utils/recommendations';
 import { WandSparklesIcon, XCircleIcon, ClockIcon } from '../components/Icons';
 import { saveCache, loadCache } from '../offline_db';
@@ -22,37 +22,47 @@ const itemVariants: Variants = {
 };
 
 const RecommendationsPage: React.FC<RecommendationsPageProps> = ({ entries }) => {
-    const latestEntry = entries.length > 0 ? entries[0] : undefined;
-    
-    const allRecommendations = useMemo(() => getRecommendations(latestEntry), [latestEntry]);
-
-    const [visibleTriggered, setVisibleTriggered] = useState<Recommendation[]>([]);
-    const [visibleResources, setVisibleResources] = useState<Recommendation[]>([]);
+        // Ensure we use true most recent entry by timestamp (entries may not be pre-sorted)
+        const latestEntry = useMemo(() => {
+            if (!entries.length) return undefined;
+            return [...entries].sort((a,b)=> new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
+        }, [entries]);
+        const recSections = useMemo(() => getRecommendations(latestEntry, entries), [latestEntry, entries]);
+    const [personalized, setPersonalized] = useState<Recommendation[]>([]);
+    const [pattern, setPattern] = useState<Recommendation[]>([]);
+    const [general, setGeneral] = useState<Recommendation[]>([]);
+    const [emotionBundles, setEmotionBundles] = useState<EmotionSuggestion[]>([]);
 
     useEffect(() => {
         (async () => {
             // Attempt to hydrate from cache when offline
-            if (!navigator.onLine) {
-                const cached = await loadCache('recs:latest');
-                if (cached) {
-                    setVisibleTriggered(cached.triggered || []);
-                    setVisibleResources(cached.resources || []);
-                    return;
-                }
-            }
-            setVisibleTriggered(allRecommendations.triggered);
-            setVisibleResources(allRecommendations.resources);
-            saveCache('recs:latest', allRecommendations);
-        })();
-    }, [allRecommendations]);
+                        if (!navigator.onLine) {
+                                            const cached = await loadCache('recs:sections.v2');
+                            if (cached) {
+                                                setPersonalized(cached.personalized || []);
+                                setPattern(cached.pattern || []);
+                                                setGeneral(cached.general || []);
+                                                setEmotionBundles(cached.emotionBundles || []);
+                                return;
+                            }
+                        }
+                                        setPersonalized(recSections.personalized);
+                        setPattern(recSections.pattern);
+                                        setGeneral(recSections.general);
+                                        setEmotionBundles(recSections.emotionBundles);
+                                        saveCache('recs:sections.v2', recSections);
+                })();
+        }, [recSections]);
 
 
-    const handleDismiss = (id: string, type: 'triggered' | 'resource') => {
-        if (type === 'triggered') {
-            setVisibleTriggered(current => current.filter(r => r.id !== id));
-        } else {
-            setVisibleResources(current => current.filter(r => r.id !== id));
-        }
+            const handleDismiss = (id: string, section: 'personalized' | 'pattern' | 'general') => {
+                    const updaterMap: Record<string, React.Dispatch<React.SetStateAction<Recommendation[]>>> = {
+                        personalized: setPersonalized,
+                        pattern: setPattern,
+                        general: setGeneral,
+                    } as any;
+                const updater = updaterMap[section];
+                updater(list => list.filter(r => r.id !== id));
     };
 
     if (entries.length === 0) {
@@ -85,30 +95,73 @@ const RecommendationsPage: React.FC<RecommendationsPageProps> = ({ entries }) =>
         >
             <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8">Recommendations</h1>
             
-            {visibleTriggered.length > 0 && (
-                <motion.section variants={itemVariants} className="mb-12">
-                    <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">For You Today</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mb-4">Based on your recent entry, here are a few things that might help.</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <AnimatePresence>
-                        {visibleTriggered.map(rec => (
-                            <RecommendationCard key={rec.id} recommendation={rec} onDismiss={() => handleDismiss(rec.id, 'triggered')} />
-                        ))}
-                        </AnimatePresence>
-                    </div>
-                </motion.section>
-            )}
+                                                {personalized.length > 0 && (
+                            <motion.section variants={itemVariants} className="mb-12">
+                                            <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">Personalized Suggestions – Recent Entry</h2>
+                                            <p className="text-slate-500 dark:text-slate-400 mb-4">Immediate support based on what you just wrote.</p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <AnimatePresence>
+                                                    {personalized.map(rec => (
+                                                        <RecommendationCard key={rec.id} recommendation={rec} onDismiss={() => handleDismiss(rec.id, 'personalized')} />
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+                            </motion.section>
+                        )}
+                                                {personalized.length === 0 && entries.length > 0 && (
+                                                    <motion.section variants={itemVariants} className="mb-12">
+                                                        <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">Personalized Suggestions – Recent Entry</h2>
+                                                        <p className="text-slate-500 dark:text-slate-400 mb-4">No immediate flags detected in your latest entry. Try expressing how you feel (e.g. "anxious", "overwhelmed", "sad") for tailored suggestions.</p>
+                                                    </motion.section>
+                                                )}
 
-             <motion.section variants={itemVariants}>
-                <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-4">Resource Library</h2>
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <AnimatePresence>
-                        {visibleResources.map(rec => (
-                            <RecommendationCard key={rec.id} recommendation={rec} onDismiss={() => handleDismiss(rec.id, 'resource')} />
-                        ))}
-                    </AnimatePresence>
-                </div>
-            </motion.section>
+                        {pattern.length > 0 && (
+                            <motion.section variants={itemVariants} className="mb-12">
+                                <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">Emerging Patterns</h2>
+                                <p className="text-slate-500 dark:text-slate-400 mb-4">Insights based on trends over the last couple of weeks.</p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <AnimatePresence>
+                                        {pattern.map(rec => (
+                                            <RecommendationCard key={rec.id} recommendation={rec} onDismiss={() => handleDismiss(rec.id, 'pattern')} />
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+                            </motion.section>
+                        )}
+
+                                    {general.length > 0 && (
+                            <motion.section variants={itemVariants} className="mb-12">
+                                            <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">General & Popular Resources</h2>
+                                            <p className="text-slate-500 dark:text-slate-400 mb-4">Widely helpful tools and best practices for overall wellbeing.</p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <AnimatePresence>
+                                                    {general.map(rec => (
+                                                        <RecommendationCard key={rec.id} recommendation={rec} onDismiss={() => handleDismiss(rec.id, 'general')} />
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+                            </motion.section>
+                        )}
+                                    {emotionBundles.length > 0 && (
+                                        <motion.section variants={itemVariants} className="mt-16">
+                                            <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-2">Emotion‑Tagged Quick Aids</h2>
+                                            <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-2xl">Pick a feeling to explore 1–2 fast, practical supports.</p>
+                                            <div className="space-y-8">
+                                                {emotionBundles.map(bundle => (
+                                                    <div key={bundle.emotion}>
+                                                        <h3 className="text-lg font-semibold capitalize text-slate-700 dark:text-slate-200 mb-3">{bundle.emotion}</h3>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            <AnimatePresence>
+                                                                {bundle.items.map(item => (
+                                                                    <RecommendationCard key={item.id} recommendation={item} onDismiss={() => { /* no dismiss for emotion micro items */ }} />
+                                                                ))}
+                                                            </AnimatePresence>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.section>
+                                    )}
 
         </motion.div>
     );
@@ -123,10 +176,10 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
     const { icon: Icon, title, description, source, link } = recommendation;
     
     const CardContent = () => (
-        <div className="flex flex-col h-full bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 transition-shadow hover:shadow-lg dark:hover:shadow-sky-900/50 relative overflow-hidden group">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 transition-shadow hover:shadow-lg dark:hover:shadow-brand-900/40 relative overflow-hidden group">
             <div className="p-5 flex-grow">
                 <div className="flex items-start justify-between">
-                    <div className={`flex-shrink-0 h-10 w-10 rounded-lg flex items-center justify-center bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400`}>
+                    <div className={`flex-shrink-0 h-10 w-10 rounded-lg flex items-center justify-center bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400`}>
                         <Icon className="h-6 w-6" />
                     </div>
                      <button onClick={onDismiss} className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Dismiss recommendation">

@@ -2,11 +2,13 @@ import DiaryEntry from '../models/DiaryEntry.js';
 
 export const createEntry = async (req, res) => {
   try {
-    const { date, mood, content, analysis } = req.body;
+    const { date, mood, content, analysis, title, tags } = req.body;
     const entry = new DiaryEntry({
       user: req.userId,
       date,
       mood,
+      title: title?.slice(0, 240),
+      tags: Array.isArray(tags) ? tags.slice(0, 12).map(t => String(t).slice(0,32)) : [],
       content,
       analysis,
     });
@@ -44,7 +46,11 @@ export const updateEntry = async (req, res) => {
     if (baseVersion && existing.updatedAt && existing.updatedAt.toISOString() !== baseVersion) {
       return res.status(409).json({ message: 'Version conflict', conflict: true, server: existing });
     }
-    Object.assign(existing, updates);
+  if (updates.title !== undefined) existing.title = String(updates.title).slice(0,240);
+  if (updates.tags !== undefined && Array.isArray(updates.tags)) existing.tags = updates.tags.slice(0,12).map(t=>String(t).slice(0,32));
+  if (updates.content !== undefined) existing.content = updates.content;
+  if (updates.mood !== undefined) existing.mood = updates.mood;
+  if (updates.analysis !== undefined) existing.analysis = updates.analysis;
     await existing.save();
     res.json(existing);
   } catch (err) {

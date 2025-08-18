@@ -84,3 +84,9 @@ export const toggleLikeCommunityPost = async (token: string, id: string) => {
   const res = await axios.post(`${API_URL}/community/${id}/like`, {}, { headers: { Authorization: `Bearer ${token}` }});
   return res.data;
 };
+
+// Admin / maintenance: purge all community posts (requires server purge key configured)
+export const purgeCommunityPosts = async (token: string, purgeKey: string) => {
+  const res = await axios.delete(`${API_URL}/community`, { headers: { Authorization: `Bearer ${token}`, 'x-purge-key': purgeKey }});
+  return res.data;
+};

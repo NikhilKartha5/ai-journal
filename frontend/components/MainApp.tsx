@@ -40,7 +40,7 @@ const MainApp: React.FC = () => {
     (async () => {
       const local = await loadLocal();
       if (!cancelled && local.length) {
-        setEntries(local.map(l => ({ id: l.id, text: l.text, timestamp: l.timestamp, analysis: l.analysis })));
+        setEntries(local.map(l => ({ id: l.id, text: l.text, title: (l as any).title, tags: (l as any).tags, timestamp: l.timestamp, analysis: l.analysis })));
       }
       const storedTheme = await loadSetting('settings:theme');
       const storedReminders = await loadSetting('settings:reminders');
@@ -60,6 +60,8 @@ const MainApp: React.FC = () => {
           const mapped = backendEntries.map(e => ({
             id: e._id,
             text: e.content,
+            title: e.title,
+            tags: e.tags,
             timestamp: e.date,
             analysis: typeof e.analysis === 'string' ? JSON.parse(e.analysis) : e.analysis,
           }));
@@ -98,33 +100,35 @@ const MainApp: React.FC = () => {
   }, [token]);
 
 
-  const handleNewEntry = useCallback(async (text: string) => {
+  const handleNewEntry = useCallback(async (text: string, meta?: { title?: string; tags?: string[] }) => {
     if (!text.trim() || !token) return;
     setIsLoading(true); setError(null); setCurrentAnalysis(null);
     try {
       const analysis = await analyzeDiaryEntry(text);
       const id = Date.now();
       const timestamp = new Date().toISOString();
-  const optimistic: DiaryEntry & { pending?: boolean } = { id, text, timestamp, analysis, pending: !navigator.onLine };
+  const optimistic: DiaryEntry & { pending?: boolean } = { id, text, title: meta?.title, tags: meta?.tags, timestamp, analysis, pending: !navigator.onLine };
   setEntries(prev => [optimistic, ...prev]);
       if (navigator.onLine) {
         try {
-          const payload = { date: timestamp, mood: '', content: text, analysis: JSON.stringify(analysis) };
+          const payload = { date: timestamp, mood: '', content: text, title: meta?.title, tags: meta?.tags, analysis: JSON.stringify(analysis) };
           const saved = await api.createDiaryEntry(token, payload) as any;
           if (saved?._id) {
             setEntries(prev => prev.map(e => e.id === id ? {
               id: saved._id,
               text: saved.content,
+              title: saved.title,
+              tags: saved.tags,
               timestamp: saved.date,
               analysis: typeof saved.analysis === 'string' ? JSON.parse(saved.analysis) : saved.analysis,
               pending: false,
             } : e));
           }
         } catch {
-          await queueCreate({ id, text, timestamp, analysis, pending: true, temp: true });
+          await queueCreate({ id, text, title: meta?.title, tags: meta?.tags, timestamp, analysis, pending: true, temp: true });
         }
       } else {
-        await queueCreate({ id, text, timestamp, analysis, pending: true, temp: true });
+        await queueCreate({ id, text, title: meta?.title, tags: meta?.tags, timestamp, analysis, pending: true, temp: true });
       }
       setCurrentAnalysis(analysis);
     } catch (err:any) { setError(err.message || 'Save failed'); }
@@ -150,23 +154,25 @@ const MainApp: React.FC = () => {
     }
   };
 
-  const handleUpdateEntry = async (idToUpdate: number | string, newText: string) => {
+  const handleUpdateEntry = async (idToUpdate: number | string, newText: string, meta?: { title?: string; tags?: string[] }) => {
     if (!token) return;
     // Optimistic local change
-    setEntries(prev => prev.map(e => e.id === idToUpdate ? { ...e, text: newText, pending: e.pending || !navigator.onLine } : e));
+    setEntries(prev => prev.map(e => e.id === idToUpdate ? { ...e, text: newText, title: meta?.title ?? e.title, tags: meta?.tags ?? e.tags, pending: e.pending || !navigator.onLine } : e));
     const payload: any = { content: newText };
+    if (meta?.title !== undefined) payload.title = meta.title;
+    if (meta?.tags !== undefined) payload.tags = meta.tags;
     if (!navigator.onLine) {
-      await queueUpdate(String(idToUpdate), { id: idToUpdate, text: newText } as any);
+      await queueUpdate(String(idToUpdate), { id: idToUpdate, text: newText, title: meta?.title, tags: meta?.tags } as any);
       return;
     }
     try {
       const updated = await api.updateDiaryEntry(token, String(idToUpdate), payload) as any;
       if (updated) {
-        setEntries(prev => prev.map(e => e.id === idToUpdate ? { ...e, text: updated.content ?? newText, timestamp: updated.date || e.timestamp, pending: false } : e));
+        setEntries(prev => prev.map(e => e.id === idToUpdate ? { ...e, text: updated.content ?? newText, title: updated.title, tags: updated.tags, timestamp: updated.date || e.timestamp, pending: false } : e));
       }
     } catch (e) {
       // queue update for retry
-      await queueUpdate(String(idToUpdate), { id: idToUpdate, text: newText } as any);
+      await queueUpdate(String(idToUpdate), { id: idToUpdate, text: newText, title: meta?.title, tags: meta?.tags } as any);
     }
   };
   
@@ -200,8 +206,8 @@ const MainApp: React.FC = () => {
   };
 
   return (
-    <motion.div
-        className="flex w-full min-h-screen bg-slate-100 dark:bg-slate-900 font-sans"
+  <motion.div
+    className="flex w-full min-h-screen font-sans bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#0f172a] to-[#334155]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

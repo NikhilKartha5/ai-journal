@@ -17,9 +17,9 @@ const AuthPage: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 dark:bg-slate-900 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#0f172a] to-[#334155] p-4">
             <div className="text-center mb-8">
-                <LogoIcon className="h-16 w-16 mx-auto text-sky-500" />
+                <LogoIcon className="h-16 w-16 mx-auto text-brand-500 dark:text-brand-400" />
                 <h1 className="text-4xl font-bold text-slate-800 dark:text-slate-100 mt-4">{t('auth.welcomeTitle')}</h1>
                 <p className="mt-2 text-slate-500 dark:text-slate-400">{t('auth.welcomeSubtitle')}</p>
             </div>
@@ -97,7 +97,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, setMode }) => {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
-                        className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-transparent focus:ring-2 focus:ring-sky-500"
+                        className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-transparent focus:ring-2 focus:ring-brand-500"
                     />
                 )}
                 <input
@@ -106,7 +106,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, setMode }) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-transparent focus:ring-2 focus:ring-sky-500"
+                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-transparent focus:ring-2 focus:ring-brand-500"
                 />
                 <input
                     type="password"
@@ -115,12 +115,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, setMode }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-transparent focus:ring-2 focus:ring-sky-500"
+                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-transparent focus:ring-2 focus:ring-brand-500"
                 />
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full flex items-center justify-center bg-sky-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-sky-700 disabled:bg-slate-400 dark:disabled:bg-slate-600 transition-colors"
+                    className="w-full flex items-center justify-center bg-brand-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-brand-700 disabled:bg-slate-400 dark:disabled:bg-slate-600 transition-colors"
                 >
                     {isLoading ? <LoadingSpinner /> : (isLogin ? t('auth.loginButton') : t('auth.registerButton'))}
                 </button>
@@ -129,7 +129,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode, setMode }) => {
                 {isLogin ? t('auth.noAccountPrompt') : t('auth.haveAccountPrompt')}
                 <button
                     onClick={() => setMode(isLogin ? 'register' : 'login')}
-                    className="font-semibold text-sky-600 dark:text-sky-400 hover:underline ml-1"
+                    className="font-semibold text-brand-600 dark:text-brand-400 hover:underline ml-1"
                 >
                     {isLogin ? t('auth.signupLink') : t('auth.loginLink')}
                 </button>

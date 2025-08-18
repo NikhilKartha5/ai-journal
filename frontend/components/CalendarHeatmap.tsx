@@ -16,8 +16,9 @@ const MONTH_LABEL_HEIGHT = 20;
 
 const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const lightColors = ['#e2e8f0', '#93c5fd', '#38bdf8', '#0ea5e9', '#0284c7']; // slate-200 to sky-600
-const darkColors = ['#1e293b', '#1e40af', '#1d4ed8', '#2563eb', '#3b82f6']; // slate-800 to blue-500
+// Brand gradient (light → intense) for heatmap levels
+const lightColors = ['#f1f5f9', '#e9d5ff', '#c084fc', '#a855f7', '#7c3aed']; // slate-100 to brand-600
+const darkColors = ['#1e293b', '#4c1d95', '#5b21b6', '#7e22ce', '#a21caf']; // slate-800 through violet spectrum
 
 const CalendarHeatmap: React.FC<CalendarHeatmapProps> = ({ startDate, data, onDayClick, theme = 'system' }) => {
   const isDarkMode =
