@@ -1,6 +1,6 @@
 # AI Diary (Aura)
 
-hi
+
 A minimalist AI-powered mental health diary where users can speak or type their thoughts and receive real-time emotional analysis, mood trends, and personalized self-care suggestions.
 
 ## Features
