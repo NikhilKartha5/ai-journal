@@ -159,7 +159,7 @@ CMD ["node","src/server.js"]
 Issues & PRs welcome. Please describe context / intention; keep commits focused.
 
 ## 📄 License
-MIT (add LICENSE file if distributing publicly).
+MIT – see `LICENSE` file for full text.
 
 ## 👤 Author
 Nikhil N Kartha

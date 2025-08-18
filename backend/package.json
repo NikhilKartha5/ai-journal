@@ -1,6 +1,7 @@
 {
   "name": "aura-backend",
   "version": "1.0.0",
+  "license": "MIT",
   "main": "src/server.js",
   "type": "module",
   "scripts": {
