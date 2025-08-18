@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -16,6 +17,7 @@ interface DiaryInputProps {
 
 export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) => {
   const [text, setText] = useState(''); // Plain text content
+  const { t } = useTranslation();
   const { transcript, isListening, startListening, stopListening, error, isSupported } = useSpeechRecognition();
   const baseTextRef = useRef('');
 
@@ -56,7 +58,7 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
         <LexicalComposer initialConfig={initialConfig}>
           <RichTextPlugin
             contentEditable={<ContentEditable className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-shadow duration-200 dark:placeholder-slate-400 p-4 pr-12 h-40" />}
-            placeholder={<div className="text-slate-400 px-4 pt-4">Write about your day, your feelings, or anything on your mind...</div>}
+            placeholder={<div className="text-slate-400 px-4 pt-4">{t('diaryInput.placeholder')}</div>}
             ErrorBoundary={({ children, error }) => error ? <div className="text-red-600">Error: {error.message}</div> : children}
           />
           <HistoryPlugin />
@@ -71,7 +73,7 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
           type="button"
           onClick={handleMicClick}
           className="absolute top-3 right-3 p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
-          aria-label={isListening ? 'Stop recording' : 'Start recording'}
+          aria-label={isListening ? t('diaryInput.stopRecording') : t('diaryInput.startRecording')}
           disabled={isLoading || !isSupported}
         >
           {isListening ? <StopCircleIcon className="text-red-500 animate-pulse" /> : <MicIcon />}
@@ -79,7 +81,7 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
       </div>
       {!isSupported && (
         <p className="text-sm text-red-600 dark:text-red-400">
-          {error || 'Speech recognition is not supported in your browser. Try Chrome on HTTPS.'}
+          {error || t('diaryInput.speechUnsupported')}
         </p>
       )}
       {error && isSupported && (
@@ -93,12 +95,12 @@ export const DiaryInput: React.FC<DiaryInputProps> = ({ onSubmit, isLoading }) =
         {isLoading ? (
           <>
             <LoadingSpinner />
-            Analyzing...
+            {t('diaryInput.analyzing')}
           </>
         ) : (
           <>
             <SendIcon />
-            Analyze Entry
+            {t('diaryInput.analyzeButton')}
           </>
         )}
       </button>

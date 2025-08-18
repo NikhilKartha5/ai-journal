@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import Slider from 'rc-slider';
 
@@ -10,7 +11,8 @@ import { BookOpenIcon, SearchIcon, FilterIcon, XIcon } from '../components/Icons
 
 interface JournalPageProps {
   entries: DiaryEntry[];
-  onDeleteEntry: (id: number) => void;
+  onDeleteEntry: (id: number | string) => void;
+  onUpdateEntry?: (id: number | string, newText: string) => void;
   theme?: AppSettings['theme'];
 }
 
@@ -29,8 +31,9 @@ const itemVariants: Variants = {
 
 const ENTRIES_PER_PAGE = 10;
 
-const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme }) => {
+const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, onUpdateEntry, theme }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useTranslation();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [dateRange, setDateRange] = useState<{ startDate: string, endDate: string }>({
     startDate: '',
@@ -103,14 +106,14 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
   const FilterPanel = () => (
     <div className="flex flex-col space-y-6">
         <div>
-            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">Jump to Date</h3>
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">{t('journal.jumpToDate')}</h3>
             <CalendarHeatmap startDate={heatmapStartDate} data={calendarData} onDayClick={handleDayClick} theme={theme} />
         </div>
         <div>
-            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">Filter by Date Range</h3>
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">{t('journal.filterDateRange')}</h3>
             <div className="space-y-3">
               <div>
-                <label htmlFor="startDate" className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Start Date</label>
+                <label htmlFor="startDate" className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{t('journal.startDate')}</label>
                 <input
                     type="date"
                     id="startDate"
@@ -120,7 +123,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
                 />
               </div>
               <div>
-                  <label htmlFor="endDate" className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">End Date</label>
+                  <label htmlFor="endDate" className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{t('journal.endDate')}</label>
                   <input
                       type="date"
                       id="endDate"
@@ -132,7 +135,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
             </div>
         </div>
         <div>
-            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">Filter by Mood Score ({moodRange[0]} - {moodRange[1]})</h3>
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">{t('journal.filterMoodScore', { min: moodRange[0], max: moodRange[1] })}</h3>
             <div className="px-2">
                  <Slider
                     range
@@ -146,7 +149,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
             </div>
         </div>
         <div>
-            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">Filter by Emotion</h3>
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">{t('journal.filterEmotion')}</h3>
             <div className="flex flex-wrap gap-2">
                 {allEmotions.map(emotion => (
                     <button
@@ -164,8 +167,8 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
             </div>
         </div>
         {hasActiveFilters && (
-            <button onClick={handleClearFilters} className="text-sm text-sky-600 hover:underline flex items-center justify-center dark:text-sky-400">
-                <XIcon className="mr-1"/> Clear All Filters
+      <button onClick={handleClearFilters} className="text-sm text-sky-600 hover:underline flex items-center justify-center dark:text-sky-400">
+        <XIcon className="mr-1"/> {t('journal.clearAll')}
             </button>
         )}
     </div>
@@ -175,7 +178,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
     <div className="flex h-full">
       {/* Desktop Filter Sidebar */}
       <aside className="hidden md:block w-80 lg:w-96 flex-shrink-0 p-6 border-r border-slate-200 dark:border-slate-700 overflow-y-auto h-screen sticky top-0 bg-white dark:bg-slate-800">
-        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Filter Journal</h2>
+  <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">{t('journal.filterPanelTitle')}</h2>
         <FilterPanel/>
       </aside>
 
@@ -190,7 +193,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
                 className="fixed top-0 left-0 bottom-0 w-full max-w-sm bg-white dark:bg-slate-800 z-50 shadow-lg p-6 overflow-y-auto"
             >
                 <div className="flex justify-between items-center mb-4">
-                     <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Filter Journal</h2>
+                     <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t('journal.filterPanelTitle')}</h2>
                      <button onClick={() => setIsFilterOpen(false)}><XIcon className="h-6 w-6"/></button>
                 </div>
                 <FilterPanel />
@@ -201,7 +204,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
       {/* Main Content */}
       <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Past Entries</h1>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">{t('journal.pastEntriesTitle')}</h1>
             <button onClick={() => setIsFilterOpen(true)} className="md:hidden p-2 rounded-md bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600">
                 <FilterIcon />
             </button>
@@ -210,7 +213,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/>
             <input
                 type="text"
-                placeholder="Search entries..."
+                placeholder={t('journal.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-700 dark:placeholder-slate-400"
@@ -224,22 +227,22 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
                 className="text-center py-16 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"
             >
                 <BookOpenIcon className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600" />
-                <p className="mt-4 font-semibold text-slate-700 dark:text-slate-200">Your Journal is Empty</p>
-                <p className="mt-1 text-sm">Your entries will be displayed here once you create them.</p>
+                <p className="mt-4 font-semibold text-slate-700 dark:text-slate-200">{t('journal.empty')}</p>
+                <p className="mt-1 text-sm">{t('journal.emptyHint')}</p>
             </motion.div>
         ) : (
             filteredEntries.length > 0 ? (
                 <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-4">
                   {filteredEntries.slice(0, visibleCount).map((entry) => (
                     <motion.div key={entry.id} variants={itemVariants}>
-                        <EntryCard entry={entry} onDelete={onDeleteEntry} />
+                        <EntryCard entry={entry} onDelete={onDeleteEntry} onUpdate={onUpdateEntry} />
                     </motion.div>
                   ))}
                 </motion.div>
             ) : (
-                <div className="text-center py-16 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                     <p className="font-semibold text-slate-700 dark:text-slate-200">No Entries Found</p>
-                    <p className="mt-1 text-sm">Try adjusting your search or filter criteria.</p>
+       <div className="text-center py-16 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+         <p className="font-semibold text-slate-700 dark:text-slate-200">{t('journal.noResultsTitle')}</p>
+        <p className="mt-1 text-sm">{t('journal.noResultsHint')}</p>
                 </div>
             )
         )}
@@ -250,7 +253,7 @@ const JournalPage: React.FC<JournalPageProps> = ({ entries, onDeleteEntry, theme
                     onClick={() => setVisibleCount(prev => prev + ENTRIES_PER_PAGE)}
                     className="bg-sky-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-sky-700 transition-colors"
                 >
-                    Load More
+                    {t('journal.loadMore')}
                 </button>
             </div>
         )}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { AppSettings, DiaryEntry } from '../types';
 import { PaletteIcon, BellIcon, DatabaseIcon, DownloadIcon, TrashIcon, SunIcon, MoonIcon, ShieldCheckIcon } from '../components/Icons';
@@ -25,6 +26,7 @@ const itemVariants: Variants = {
 
 const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onSettingsChange, onExportAll, onDeleteAll, entries }) => {
     const [notificationPermission, setNotificationPermission] = useState('default');
+    const { t } = useTranslation();
     const [isTherapistModalOpen, setIsTherapistModalOpen] = useState(false);
     const [reminderTimeoutId, setReminderTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
@@ -101,23 +103,24 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onSettingsChange,
                 exit="exit"
                 className="p-4 sm:p-6 lg:p-8"
             >
-                <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8">Settings</h1>
+                <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8">{t('settings.title')}</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {/* Appearance Card */}
                     <motion.div variants={itemVariants} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                        <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><PaletteIcon className="mr-2 text-sky-500"/> Appearance</h2>
+                                                <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><PaletteIcon className="mr-2 text-sky-500"/> {t('settings.appearance')}</h2>
                         <div className="flex items-center justify-between">
-                            <label className="text-slate-600 dark:text-slate-300">Theme</label>
+                                                        <label className="text-slate-600 dark:text-slate-300">Theme</label>
                             <div className="flex items-center space-x-1 p-1 rounded-lg bg-slate-100 dark:bg-slate-700">
                                <ThemeButton icon={SunIcon} label="Light" currentTheme={settings.theme} targetTheme="light" onClick={handleThemeChange} />
                                <ThemeButton icon={MoonIcon} label="Dark" currentTheme={settings.theme} targetTheme="dark" onClick={handleThemeChange} />
                             </div>
                         </div>
+                        <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">Language setting moved to the sidebar switcher.</p>
                     </motion.div>
 
                      {/* Reminders Card */}
                     <motion.div variants={itemVariants} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><BellIcon className="mr-2 text-sky-500"/> Reminders</h2>
+                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><BellIcon className="mr-2 text-sky-500"/> {t('settings.reminders')}</h2>
                          <div className="space-y-4">
                              <div className="flex items-center justify-between">
                                 <label htmlFor="reminder-toggle" className="text-slate-600 dark:text-slate-300">Enable daily reminders</label>
@@ -158,20 +161,20 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onSettingsChange,
 
                     {/* Data Management Card */}
                     <motion.div variants={itemVariants} className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><DatabaseIcon className="mr-2 text-sky-500"/> Data Management</h2>
+                         <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-4"><DatabaseIcon className="mr-2 text-sky-500"/> {t('settings.dataManagement')}</h2>
                          <div className="space-y-4">
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                                 <div>
-                                    <h3 className="font-medium text-slate-600 dark:text-slate-300">Export Your Data</h3>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">Download all your journal entries and settings as a JSON file.</p>
+                                    <h3 className="font-medium text-slate-600 dark:text-slate-300">{t('settings.exportPdf')}</h3>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">Download a PDF containing your entries, summaries, emotions, and settings.</p>
                                 </div>
                                 <button onClick={onExportAll} className="mt-2 sm:mt-0 w-full sm:w-auto flex items-center justify-center bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 font-medium py-2 px-4 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
-                                    <DownloadIcon/> Export
+                                    <DownloadIcon/> Export PDF
                                 </button>
                             </div>
                              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
                                 <div>
-                                    <h3 className="font-medium text-red-600 dark:text-red-400">Delete All Data</h3>
+                                    <h3 className="font-medium text-red-600 dark:text-red-400">{t('settings.deleteAll')}</h3>
                                     <p className="text-sm text-slate-500 dark:text-slate-400">Permanently delete your account and all associated data.</p>
                                 </div>
                                 <button onClick={onDeleteAll} className="mt-2 sm:mt-0 w-full sm:w-auto flex items-center justify-center bg-red-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">

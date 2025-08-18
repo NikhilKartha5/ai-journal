@@ -3,6 +3,7 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { DiaryEntry, Recommendation } from '../types';
 import { getRecommendations } from '../utils/recommendations';
 import { WandSparklesIcon, XCircleIcon, ClockIcon } from '../components/Icons';
+import { saveCache, loadCache } from '../offline_db';
 
 interface RecommendationsPageProps {
   entries: DiaryEntry[];
@@ -29,8 +30,20 @@ const RecommendationsPage: React.FC<RecommendationsPageProps> = ({ entries }) =>
     const [visibleResources, setVisibleResources] = useState<Recommendation[]>([]);
 
     useEffect(() => {
-        setVisibleTriggered(allRecommendations.triggered);
-        setVisibleResources(allRecommendations.resources);
+        (async () => {
+            // Attempt to hydrate from cache when offline
+            if (!navigator.onLine) {
+                const cached = await loadCache('recs:latest');
+                if (cached) {
+                    setVisibleTriggered(cached.triggered || []);
+                    setVisibleResources(cached.resources || []);
+                    return;
+                }
+            }
+            setVisibleTriggered(allRecommendations.triggered);
+            setVisibleResources(allRecommendations.resources);
+            saveCache('recs:latest', allRecommendations);
+        })();
     }, [allRecommendations]);
 
 

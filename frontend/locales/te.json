@@ -1,0 +1,8 @@
+{
+  "appTitle": "ఏఐ డైరీ",
+  "nav": {"dashboard": "డాష్‌బోర్డ్","insights": "అవగాహనలు","journal": "జర్నల్","recommendations": "సిఫార్సులు","community": "కమ్యూనిటీ","settings": "సెట్టింగ్‌లు","logout": "లాగౌట్"},
+  "actions": {"save": "సేవ్","cancel": "రద్దు","delete": "తొలగించు","edit": "మార్చు","post": "పోస్ట్"},
+  "journal": {"empty": "మీ జర్నల్ ఖాళీగా ఉంది","emptyHint": "మీరు ఎంట్రీలు సృష్టించిన తర్వాత అవి ఇక్కడ కనిపిస్తాయి."},
+  "community": {"title": "సమాజ ఆరోగ్య ఫీడ్","placeholder": "నేడు నన్ను ఎదుర్కొనేందుకు సహాయపడినది...","noPosts": "ఇంకా పోస్టులు లేవు. సహాయకమైనదేదైనా పంచుకోవడంలో మొదటి వ్యక్తి అవ్వండి."},
+  "settings": {"title": "సెట్టింగ్‌లు","appearance": "రూపము","reminders": "రిమైండర్లు","dataManagement": "డేటా నిర్వహణ","exportPdf": "PDF ఎగుమతి","deleteAll": "అన్ని డేటా తొలగించు","language": "భాష"}
+}

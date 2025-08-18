@@ -1,0 +1,8 @@
+{
+  "appTitle": "एआई डायरी",
+  "nav": {"dashboard": "डैशबोर्ड","insights": "अंतर्दृष्टि","journal": "जर्नल","recommendations": "सिफारिशें","community": "समुदाय","settings": "सेटिंग्स","logout": "लॉगआउट"},
+  "actions": {"save": "सहेजें","cancel": "रद्द करें","delete": "हटाएँ","edit": "संपादित करें","post": "पोस्ट"},
+  "journal": {"empty": "आपकी डायरी खाली है","emptyHint": "जब आप प्रविष्टियाँ बनाएंगे तो वे यहाँ दिखाई देंगी."},
+  "community": {"title": "समुदाय स्वास्थ्य फ़ीड","placeholder": "आज मेरी मदद करने वाली कोई चीज़ थी...","noPosts": "अभी कोई पोस्ट नहीं। कुछ सहायक साझा करने वाले पहले व्यक्ति बनें."},
+  "settings": {"title": "सेटिंग्स","appearance": "रूप","reminders": "रीमाइंडर","dataManagement": "डेटा प्रबंधन","exportPdf": "PDF निर्यात करें","deleteAll": "सारा डेटा हटाएँ","language": "भाषा"}
+}

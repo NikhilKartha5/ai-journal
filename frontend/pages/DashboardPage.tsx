@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, Variants } from 'framer-motion';
 import { DiaryInput } from '../components/DiaryInput';
 import { AnalysisDisplay } from '../components/AnalysisDisplay';
@@ -37,6 +38,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({
   onNewEntry,
   theme,
 }) => {
+  const { t } = useTranslation();
   return (
     <motion.div
       variants={containerVariants}
@@ -48,19 +50,19 @@ const DashboardPage: React.FC<DashboardPageProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <motion.div variants={itemVariants} className="lg:col-span-1 flex flex-col space-y-8">
           <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-            <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">How are you feeling today?</h2>
+            <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">{t('dashboard.prompt')}</h2>
             <DiaryInput onSubmit={onNewEntry} isLoading={isLoading} />
           </div>
           <AnalysisDisplay analysis={currentAnalysis} isLoading={isLoading} error={error} />
         </motion.div>
 
         <motion.div variants={itemVariants} className="lg:col-span-2 bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-          <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">Your Mood Journey</h2>
+          <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-4">{t('dashboard.moodJourney')}</h2>
           {entries.length > 1 ? (
             <MoodChart data={entries} theme={theme} />
           ) : (
             <div className="h-64 flex items-center justify-center text-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4">
-              <p>Your mood chart will appear here once you have more than one entry. <br/> It's a great way to visualize your progress over time!</p>
+              <p>{t('dashboard.moodChartPlaceholderLine1')} <br/> {t('dashboard.moodChartPlaceholderLine2')}</p>
             </div>
           )}
         </motion.div>

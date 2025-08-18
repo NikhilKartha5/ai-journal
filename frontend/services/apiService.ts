@@ -61,3 +61,26 @@ export const deleteDiaryEntry = async (token: string, id: string) => {
   });
   return res.data;
 };
+
+export const deleteAllDiaryEntries = async (token: string) => {
+  const res = await axios.delete(`${API_URL}/diary`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
+
+// Community feed
+export const fetchCommunityFeed = async (token: string) => {
+  const res = await axios.get(`${API_URL}/community`, { headers: { Authorization: `Bearer ${token}` }});
+  return res.data;
+};
+
+export const createCommunityPost = async (token: string, content: string) => {
+  const res = await axios.post(`${API_URL}/community`, { content }, { headers: { Authorization: `Bearer ${token}` }});
+  return res.data;
+};
+
+export const toggleLikeCommunityPost = async (token: string, id: string) => {
+  const res = await axios.post(`${API_URL}/community/${id}/like`, {}, { headers: { Authorization: `Bearer ${token}` }});
+  return res.data;
+};

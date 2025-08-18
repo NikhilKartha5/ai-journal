@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import type { User } from '../types';
 import * as api from '../services/apiService';
+import { secureGet, secureSet, secureRemove } from '../utils/secureStorage';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -27,23 +28,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Check for an active session on component mount
   useEffect(() => {
-    // Try to restore session from localStorage
-    const storedToken = localStorage.getItem('auraToken');
-    const storedUser = localStorage.getItem('auraUser');
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setCurrentUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    // Restore session via secure storage (falls back silently if unavailable)
+    (async () => {
+      try {
+        const storedToken = await secureGet('token');
+        const storedUser = await secureGet('user');
+        if (storedToken && storedUser) {
+          setToken(storedToken as string);
+          setCurrentUser(storedUser as User);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<void> => {
     try {
   const res = await api.login(email, password) as any;
-      setToken(res.token);
-      setCurrentUser({ name: res.user.username, email: res.user.email });
-      localStorage.setItem('auraToken', res.token);
-      localStorage.setItem('auraUser', JSON.stringify({ name: res.user.username, email: res.user.email }));
+  const userObj = { name: res.user.username, email: res.user.email } as User;
+  setToken(res.token);
+  setCurrentUser(userObj);
+  // Persist securely (best-effort)
+  secureSet('token', res.token);
+  secureSet('user', userObj);
     } catch (err: any) {
       throw new Error(err.response?.data?.message || 'Login failed');
     }
@@ -62,8 +70,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = useCallback(() => {
     setCurrentUser(null);
     setToken(null);
-    localStorage.removeItem('auraToken');
-    localStorage.removeItem('auraUser');
+  secureRemove('token');
+  secureRemove('user');
   }, []);
 
   const value = {

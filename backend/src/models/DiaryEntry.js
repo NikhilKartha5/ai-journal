@@ -6,6 +6,6 @@ const diaryEntrySchema = new mongoose.Schema({
   mood: { type: String },
   content: { type: String },
   analysis: { type: String },
-});
+}, { timestamps: true });
 
 export default mongoose.model('DiaryEntry', diaryEntrySchema);

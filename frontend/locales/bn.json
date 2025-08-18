@@ -1,0 +1,8 @@
+{
+  "appTitle": "এআই ডায়েরি",
+  "nav": {"dashboard": "ড্যাশবোর্ড","insights": "অন্তর্দৃষ্টি","journal": "জার্নাল","recommendations": "সুপারিশ","community": "কমিউনিটি","settings": "সেটিংস","logout": "লগআউট"},
+  "actions": {"save": "সংরক্ষণ","cancel": "বাতিল","delete": "মুছুন","edit": "সম্পাদনা","post": "পোস্ট"},
+  "journal": {"empty": "আপনার জার্নাল খালি","emptyHint": "আপনি এন্ট্রি তৈরি করলে সেগুলি এখানে প্রদর্শিত হবে।"},
+  "community": {"title": "কমিউনিটি সুস্থতা ফিড","placeholder": "আজ আমাকে মোকাবেলায় সাহায্য করেছে...","noPosts": "এখনও কোন পোস্ট নেই। সহায়ক কিছু শেয়ার করার প্রথম ব্যক্তি হোন।"},
+  "settings": {"title": "সেটিংস","appearance": "চেহারা","reminders": "রিমাইন্ডার","dataManagement": "ডেটা ম্যানেজমেন্ট","exportPdf": "PDF এক্সপোর্ট","deleteAll": "সব ডেটা মুছুন","language": "ভাষা"}
+}

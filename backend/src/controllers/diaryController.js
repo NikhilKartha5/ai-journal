@@ -38,13 +38,15 @@ export const getEntry = async (req, res) => {
 
 export const updateEntry = async (req, res) => {
   try {
-    const entry = await DiaryEntry.findOneAndUpdate(
-      { _id: req.params.id, user: req.userId },
-      req.body,
-      { new: true }
-    );
-    if (!entry) return res.status(404).json({ message: 'Entry not found' });
-    res.json(entry);
+    const { baseVersion, ...updates } = req.body || {};
+    const existing = await DiaryEntry.findOne({ _id: req.params.id, user: req.userId });
+    if (!existing) return res.status(404).json({ message: 'Entry not found' });
+    if (baseVersion && existing.updatedAt && existing.updatedAt.toISOString() !== baseVersion) {
+      return res.status(409).json({ message: 'Version conflict', conflict: true, server: existing });
+    }
+    Object.assign(existing, updates);
+    await existing.save();
+    res.json(existing);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
@@ -55,6 +57,16 @@ export const deleteEntry = async (req, res) => {
     const entry = await DiaryEntry.findOneAndDelete({ _id: req.params.id, user: req.userId });
     if (!entry) return res.status(404).json({ message: 'Entry not found' });
     res.json({ message: 'Entry deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Delete all entries for the authenticated user
+export const deleteAllEntries = async (req, res) => {
+  try {
+    const result = await DiaryEntry.deleteMany({ user: req.userId });
+    res.json({ message: 'All entries deleted', deletedCount: result.deletedCount });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

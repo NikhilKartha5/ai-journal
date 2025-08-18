@@ -1,6 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { secureSet } from '../utils/secureStorage';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogoIcon, HomeIcon, ChartBarIcon, BookOpenIcon, CogIcon, WandSparklesIcon, LogoutIcon } from './Icons';
+import { LogoIcon, HomeIcon, ChartBarIcon, BookOpenIcon, CogIcon, WandSparklesIcon, LogoutIcon, HeartIcon } from './Icons';
 import { LightbulbIcon } from './Icons';
 
 interface NavBarProps {
@@ -15,15 +17,20 @@ type NavItemData = {
   icon: React.FC<{ className?: string }>;
 };
 
-const navItems: NavItemData[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: HomeIcon },
-  { id: 'insights', label: 'Insights', icon: ChartBarIcon },
-  { id: 'recommendations', label: 'Suggestions', icon: LightbulbIcon },
-  { id: 'journal', label: 'Journal', icon: BookOpenIcon },
-  { id: 'settings', label: 'Settings', icon: CogIcon },
-];
+function buildNavItems(t: any): NavItemData[] {
+  return [
+    { id: 'dashboard', label: t('nav.dashboard'), icon: HomeIcon },
+    { id: 'insights', label: t('nav.insights'), icon: ChartBarIcon },
+    { id: 'recommendations', label: t('nav.recommendations'), icon: LightbulbIcon },
+    { id: 'journal', label: t('nav.journal'), icon: BookOpenIcon },
+    { id: 'community', label: t('nav.community'), icon: HeartIcon },
+    { id: 'settings', label: t('nav.settings'), icon: CogIcon },
+  ];
+}
 
 export const NavBar: React.FC<NavBarProps> = ({ activePage, setActivePage, onLogout }) => {
+  const { t } = useTranslation();
+  const navItems = buildNavItems(t);
   return (
     <>
       {/* Desktop Sidebar */}
@@ -41,10 +48,13 @@ export const NavBar: React.FC<NavBarProps> = ({ activePage, setActivePage, onLog
                 onClick={() => setActivePage(item.id)}
               />
             ))}
+            <li className="pt-4">
+              <LanguageSwitcher compact />
+            </li>
           </ul>
         </div>
         <div className="flex flex-col items-center space-y-2">
-           <button onClick={onLogout} title="Logout" className="flex flex-col items-center justify-center w-16 h-16 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-500 transition-colors group relative">
+           <button onClick={onLogout} title={t('nav.logout')} className="flex flex-col items-center justify-center w-16 h-16 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-500 transition-colors group relative">
               <LogoutIcon />
            </button>
         </div>
@@ -62,8 +72,11 @@ export const NavBar: React.FC<NavBarProps> = ({ activePage, setActivePage, onLog
               isMobile
             />
           ))}
+          <li>
+            <LanguageSwitcher />
+          </li>
            <li>
-              <button onClick={onLogout} className="flex flex-col items-center justify-center w-16 h-16 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 transition-colors" aria-label="Logout">
+              <button onClick={onLogout} className="flex flex-col items-center justify-center w-16 h-16 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 transition-colors" aria-label={t('nav.logout')}>
                   <LogoutIcon className="h-6 w-6" />
               </button>
            </li>
@@ -114,5 +127,29 @@ const NavItem: React.FC<NavItemProps> = ({ item, isActive, onClick, isMobile = f
         </span>
       </button>
     </li>
+  );
+};
+
+// Small reusable language switcher (fallback if Settings page not rendering correctly)
+const LanguageSwitcher: React.FC<{ compact?: boolean }> = ({ compact }) => {
+  const { i18n } = useTranslation();
+  const current = i18n.language || 'en';
+  const change = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const lang = e.target.value; i18n.changeLanguage(lang); try { localStorage.setItem('lang', lang); secureSet('lang', lang);} catch {}
+  };
+  return (
+    <select
+      value={current}
+      onChange={change}
+      className={`text-xs bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded px-1 py-1 focus:outline-none focus:ring-1 focus:ring-sky-500 ${compact ? 'w-16' : 'w-20'}`}
+      aria-label="Language"
+    >
+      <option value="en">EN</option>
+      <option value="hi">हि</option>
+      <option value="ta">TA</option>
+      <option value="te">TE</option>
+      <option value="ml">ML</option>
+      <option value="bn">BN</option>
+    </select>
   );
 };

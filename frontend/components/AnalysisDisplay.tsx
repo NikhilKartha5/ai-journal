@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AnalysisResult } from '../types';
 import { SparklesIcon, HeartIcon, BrainCircuitIcon, LightbulbIcon, AlertTriangleIcon } from './Icons';
 
@@ -42,6 +43,7 @@ const SkeletonLoader: React.FC = () => (
 
 
 export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ analysis, isLoading, error }) => {
+  const { t } = useTranslation();
   if (isLoading) {
     return <SkeletonLoader />;
   }
@@ -51,7 +53,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ analysis, isLo
       <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 text-red-800 dark:text-red-300 p-4 rounded-lg flex items-start space-x-3">
         <AlertTriangleIcon className="mt-1" />
         <div>
-          <h3 className="font-semibold">Analysis Failed</h3>
+          <h3 className="font-semibold">{t('analysis.errorTitle')}</h3>
           <p className="text-sm">{error}</p>
         </div>
       </div>
@@ -62,7 +64,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ analysis, isLo
     return (
       <div className="bg-white dark:bg-slate-800/50 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center text-slate-500 dark:text-slate-400">
         <SparklesIcon className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600" />
-        <p className="mt-4">Your analysis will appear here after you submit an entry.</p>
+  <p className="mt-4">{t('analysis.placeholder')}</p>
       </div>
     );
   }
@@ -72,7 +74,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ analysis, isLo
       <div>
           <h3 className="text-md font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-2">
             <BrainCircuitIcon />
-            Gentle Summary
+            {t('analysis.summaryTitle')}
           </h3>
           <p className="text-slate-600 dark:text-slate-300 italic">"{analysis.summary}"</p>
       </div>
@@ -80,7 +82,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ analysis, isLo
       <div>
           <h3 className="text-md font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-3">
             <HeartIcon />
-            Key Emotions
+            {t('analysis.emotionsTitle')}
           </h3>
           <div className="flex flex-wrap gap-2">
             {analysis.emotions.map((emotion, index) => (
@@ -94,7 +96,7 @@ export const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({ analysis, isLo
       <div>
           <h3 className="text-md font-semibold text-slate-700 dark:text-slate-200 flex items-center mb-3">
             <LightbulbIcon />
-            Self-Care Suggestions
+            {t('analysis.suggestionsTitle')}
           </h3>
           <ul className="space-y-2 list-disc list-inside text-slate-600 dark:text-slate-300">
             {analysis.suggestions.map((tip, index) => (

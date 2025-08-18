@@ -1,0 +1,8 @@
+{
+  "appTitle": "ஏஐ நாட்குறிப்பு",
+  "nav": {"dashboard": "டாஷ்போர்டு","insights": "உள்ளடக்கம்","journal": "ஜர்னல்","recommendations": "பரிந்துரைகள்","community": "சமூக","settings": "அமைப்புகள்","logout": "வெளியேறு"},
+  "actions": {"save": "சேமி","cancel": "ரத்து","delete": "அழி","edit": "தொகு","post": "பதிவு"},
+  "journal": {"empty": "உங்கள் நாள்குறிப்பு காலியாக உள்ளது","emptyHint": "நீங்கள் பதிவுகளை உருவாக்கும் போது அவை இங்கு தோன்றும்."},
+  "community": {"title": "சமூக நல ஊட்டம்","placeholder": "இன்று என்னை சமாளிக்க உதவியது...","noPosts": "இன்னும் பதிவுகள் இல்லை. உதவிகரமானதை பகிர முதலில் இருங்கள்."},
+  "settings": {"title": "அமைப்புகள்","appearance": "தோற்றம்","reminders": "நினைவூட்டல்கள்","dataManagement": "தரவு மேலாண்மை","exportPdf": "PDF ஏற்று","deleteAll": "அனைத்து தரவும் நீக்கு","language": "மொழி"}
+}

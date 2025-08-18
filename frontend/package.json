@@ -15,16 +15,21 @@
     "d3-scale": "^4.0.2",
     "framer-motion": "^11.3.1",
     "html2canvas": "^1.4.1",
+    "i18next": "^23.16.8",
     "jspdf": "^2.5.1",
     "lexical": "^0.34.0",
     "rc-slider": "^10.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-i18next": "^15.6.1",
     "recharts": "^3.1.2"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
     "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+  "tailwindcss": "^3.4.10",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

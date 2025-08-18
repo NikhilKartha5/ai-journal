@@ -5,6 +5,7 @@ import {
   getEntry,
   updateEntry,
   deleteEntry,
+  deleteAllEntries,
 } from '../controllers/diaryController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
@@ -17,5 +18,6 @@ router.get('/', getEntries);
 router.get('/:id', getEntry);
 router.put('/:id', updateEntry);
 router.delete('/:id', deleteEntry);
+router.delete('/', deleteAllEntries); // delete all entries for user
 
 export default router;

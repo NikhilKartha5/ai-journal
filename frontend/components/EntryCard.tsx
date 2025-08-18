@@ -3,15 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { DiaryEntry } from '../types';
 import { ShareIcon, PrinterIcon, ChevronDownIcon, TrashIcon, HeartIcon } from './Icons';
 
-interface EntryCardProps {
-  entry: DiaryEntry;
-  onDelete: (id: number) => void;
-}
+interface EntryCardProps { entry: DiaryEntry & { pending?: boolean }; onDelete: (id: number | string) => void; onUpdate?: (id: string | number, newText: string) => void; }
 
-export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete }) => {
+export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete, onUpdate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { id, text, timestamp, analysis } = entry;
   const date = new Date(timestamp);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(text);
   
   const [shareMsg, setShareMsg] = useState<string | null>(null);
   const shareViaEmail = () => {
@@ -78,8 +77,9 @@ export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete }) => {
     <div className="p-5">
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1">
-          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
             {date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            {entry.pending && <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-200 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-300 dark:border-amber-700">Unsynced</span>}
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400">{date.toLocaleTimeString()}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Mood Score: <span className="font-bold text-slate-700 dark:text-slate-200">{analysis.sentimentScore}/10</span></p>
@@ -121,8 +121,24 @@ export const EntryCard: React.FC<EntryCardProps> = ({ entry, onDelete }) => {
           className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 space-y-4 overflow-hidden"
          >
           <div>
-            <h4 className="font-semibold text-sm text-slate-600 dark:text-slate-300 mb-1">Your Words</h4>
-            <p className="text-slate-700 dark:text-slate-200 whitespace-pre-wrap">{text}</p>
+            <div className="flex items-center justify-between mb-1">
+              <h4 className="font-semibold text-sm text-slate-600 dark:text-slate-300">Your Words</h4>
+              {!isEditing && onUpdate && (
+                <button onClick={() => { setIsEditing(true); setEditText(text); }} className="text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">Edit</button>
+              )}
+            </div>
+            {!isEditing && (
+              <p className="text-slate-700 dark:text-slate-200 whitespace-pre-wrap">{text}</p>
+            )}
+            {isEditing && (
+              <div className="space-y-2">
+                <textarea value={editText} onChange={e => setEditText(e.target.value)} className="w-full h-32 text-sm p-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+                <div className="flex gap-2">
+                  <button onClick={() => { setIsEditing(false); setEditText(text); }} className="px-3 py-1 text-xs rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Cancel</button>
+                  <button onClick={() => { if (editText.trim() && editText !== text) { onUpdate && onUpdate(id, editText.trim()); } setIsEditing(false); }} className="px-3 py-1 text-xs rounded bg-sky-600 text-white hover:bg-sky-500 disabled:opacity-40" disabled={!editText.trim() || editText === text}>Save</button>
+                </div>
+              </div>
+            )}
           </div>
           <div>
             <h4 className="font-semibold text-sm text-slate-600 dark:text-slate-300 mb-1">Gentle Summary</h4>

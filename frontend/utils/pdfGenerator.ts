@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import type { DiaryEntry, TherapistReportOptions } from '../types';
+import type { DiaryEntry, TherapistReportOptions, AppSettings } from '../types';
 
 export const generateTherapistReport = async (
     options: TherapistReportOptions,
@@ -121,4 +121,56 @@ export const generateTherapistReport = async (
     }
 
     doc.save('Aura_Therapist_Report.pdf');
+};
+
+// Simple full data export (entries + settings) to PDF instead of JSON
+export const exportFullDataPdf = (entries: DiaryEntry[], settings: AppSettings) => {
+        const doc = new jsPDF({ orientation: 'p', unit: 'px', format: 'a4' });
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const margin = 28;
+        let y = margin;
+        const addWrapped = (text: string, fontSize = 11, gap = 6) => {
+                doc.setFontSize(fontSize);
+                const lines = doc.splitTextToSize(text, pageWidth - margin * 2);
+                lines.forEach(line => {
+                        if (y > pageHeight - margin) { doc.addPage(); y = margin; }
+                        doc.text(line, margin, y);
+                        y += fontSize * 1.2;
+                });
+                y += gap;
+        };
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(20);
+        doc.text('Aura Journal Export', pageWidth/2, y, { align: 'center' });
+        y += 30;
+        doc.setFont('helvetica','normal');
+        addWrapped(`Generated: ${new Date().toLocaleString()}`, 10, 10);
+        addWrapped('This PDF contains your saved settings and all diary entries.', 11, 14);
+        // Settings
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(14); doc.text('Settings', margin, y); y += 18; doc.setFont('helvetica','normal');
+        addWrapped(`Theme: ${settings.theme}`);
+        addWrapped(`Reminders: ${settings.reminders.enabled ? 'Enabled at '+settings.reminders.time : 'Disabled'}`);
+        // Summary stats
+        doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text('Summary', margin, y); y += 18; doc.setFont('helvetica','normal');
+        addWrapped(`Total Entries: ${entries.length}`);
+        if (entries.length) {
+                const avg = (entries.reduce((s,e)=>s+e.analysis.sentimentScore,0)/entries.length).toFixed(2);
+                addWrapped(`Average Mood Score: ${avg}`);
+        }
+        // Entries
+        doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text('Entries', margin, y); y += 20; doc.setFont('helvetica','normal');
+        entries.sort((a,b)=> new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            .forEach(entry => {
+                if (y > pageHeight - margin) { doc.addPage(); y = margin; }
+                const date = new Date(entry.timestamp);
+                doc.setFont('helvetica','bold'); doc.setFontSize(12);
+                doc.text(date.toLocaleString(), margin, y); y += 16;
+                doc.setFont('helvetica','normal'); doc.setFontSize(10);
+                addWrapped(`Mood: ${entry.analysis.sentimentScore}/10 | Emotions: ${entry.analysis.emotions.join(', ')}`,10,4);
+                addWrapped('Summary: '+entry.analysis.summary,10,4);
+                addWrapped(entry.text,10,12);
+            });
+        doc.save('Aura_Full_Export.pdf');
 };

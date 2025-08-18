@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* custom slider overrides remain */
+.rc-slider-track { background-color: #0ea5e9; } 
+.rc-slider-handle { border-color: #0ea5e9; opacity: 1; }
+.rc-slider-handle:hover, .rc-slider-handle-dragging { border-color: #0284c7 !important; box-shadow: 0 0 0 5px rgba(14,165,233,0.2) !important; }
+.dark .rc-slider-track { background-color: #38bdf8; }
+.dark .rc-slider-rail { background-color: #334155; }
+.dark .rc-slider-handle { background-color: #0f172a; border-color: #38bdf8; }
+.dark .rc-slider-handle:hover, .dark .rc-slider-handle-dragging { border-color: #7dd3fc !important; box-shadow: 0 0 0 5px rgba(56,189,248,0.2) !important; }
+.dark .rc-slider-mark-text { color: #94a3b8; }
