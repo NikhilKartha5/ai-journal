@@ -4,6 +4,13 @@
 
 Futuristic, privacy‑minded journaling. Type or speak entries, get instant emotional + sentiment insights, track mood trends, and receive gentle, personalized self‑care suggestions.
 
+## 📸 App Previews
+Below are screenshots of key pages. Images are located in the `Pics` folder and named after their respective pages:
+
+| Home | Dashboard | Journal | Insights | Community Feed | Settings | Sign In | Sign Up |
+|------|-----------|---------|----------|----------------|----------|---------|---------|
+| ![Home](Pics/Home%20(2).png) | ![Dashboard](Pics/dashboard.png) | ![Journal](Pics/Journal.png) | ![Insights](Pics/Insights.png) | ![Community Feed](Pics/communitywellnessfeed.png) | ![Settings](Pics/settings.png) | ![Sign In](Pics/Sign%20in.png) | ![Sign Up](Pics/Sign%20up.png) |
+
 </div>
 
 ## ✨ Core Features
@@ -42,6 +49,18 @@ frontend/
   utils/
   context/
 ```
+
+## 🤖 Model Folder
+
+The `model` directory contains assets for advanced emotion and sentiment analysis:
+
+- `distilbert_models.ipynb`: Jupyter notebook that trains a multi-label emotion classification model using DistilBERT (HuggingFace Transformers, PyTorch). It processes journal entries, tokenizes them, and predicts multiple emotions per entry. The model uses BCEWithLogitsLoss and AdamW optimizer, and is evaluated with F1 score and classification metrics. The notebook demonstrates data cleaning, training, and evaluation workflows for robust emotion detection.
+
+- `best_model.pt`: The best performing PyTorch model checkpoint from the notebook, suitable for advanced sentiment and emotion analysis. While not directly integrated into the app yet, it can be used to power richer insights and emotion detection features in future updates.
+
+- `emotion_classification_model_complete.pt`: A finalized version of the emotion classification model, ready for deployment or further experimentation.
+
+These models enable nuanced emotion analysis beyond basic sentiment scoring, and can be integrated into backend or AI services to provide deeper emotional insights for diary entries.
 
 ## 🔐 Environment Variables (Backend `.env`)
 Required:
@@ -123,30 +142,7 @@ JWT is sent via `Authorization: Bearer <token>` header.
 5. Run backend with a process manager (PM2 / systemd / platform runtime) `node src/server.js`.
 6. Enable HTTPS: platform certs or reverse proxy (Caddy / Nginx / Cloudflare) to preserve mic functionality.
 
-### Minimal Docker Sketch (optional)
-```Dockerfile
-FROM node:20-alpine as backend
-WORKDIR /app
-COPY backend/package*.json ./
-RUN npm ci --omit=dev
-COPY backend ./
 
-FROM node:20-alpine as frontend
-WORKDIR /web
-COPY frontend/package*.json ./
-RUN npm ci --omit=dev
-COPY frontend ./
-RUN npm run build
-
-# Final image (serve backend + static via any static host or separate)
-FROM node:20-alpine
-WORKDIR /app
-COPY --from=backend /app ./backend
-COPY --from=frontend /web/dist ./frontend_dist
-WORKDIR /app/backend
-ENV NODE_ENV=production
-CMD ["node","src/server.js"]
-```
 
 ## 🧩 Roadmap (Ideas)
 * Persist full rich text (Lexical JSON) + advanced formatting (lists, headings).
